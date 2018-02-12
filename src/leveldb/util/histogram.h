@@ -2,21 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
-#ifndef STORAGE_LEVELDB_UTIL_HISTOOFFSHORE_H_
-#define STORAGE_LEVELDB_UTIL_HISTOOFFSHORE_H_
+#ifndef STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
+#define STORAGE_LEVELDB_UTIL_HISTOGRAM_H_
 
 #include <string>
 
 namespace leveldb {
 
-class Histooffshore {
+class Histogram {
  public:
-  Histooffshore() { }
-  ~Histooffshore() { }
+  Histogram() { }
+  ~Histogram() { }
 
   void Clear();
   void Add(double value);
-  void Merge(const Histooffshore& other);
+  void Merge(const Histogram& other);
 
   std::string ToString() const;
 
@@ -39,4 +39,4 @@ class Histooffshore {
 
 }  // namespace leveldb
 
-#endif  // STORAGE_LEVELDB_UTIL_HISTOOFFSHORE_H_
+#endif  // STORAGE_LEVELDB_UTIL_HISTOGRAM_H_

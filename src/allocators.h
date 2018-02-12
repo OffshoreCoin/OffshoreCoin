@@ -63,11 +63,11 @@ public:
         const size_t end_page = (base_addr + size - 1) & page_mask;
         for(size_t page = start_page; page <= end_page; page += page_size)
         {
-            Histooffshore::iterator it = histooffshore.find(page);
-            if(it == histooffshore.end()) // Newly locked page
+            Histogram::iterator it = histogram.find(page);
+            if(it == histogram.end()) // Newly locked page
             {
                 locker.Lock(reinterpret_cast<void*>(page), page_size);
-                histooffshore.insert(std::make_pair(page, 1));
+                histogram.insert(std::make_pair(page, 1));
             }
             else // Page was already locked; increase counter
             {
@@ -86,15 +86,15 @@ public:
         const size_t end_page = (base_addr + size - 1) & page_mask;
         for(size_t page = start_page; page <= end_page; page += page_size)
         {
-            Histooffshore::iterator it = histooffshore.find(page);
-            assert(it != histooffshore.end()); // Cannot unlock an area that was not locked
+            Histogram::iterator it = histogram.find(page);
+            assert(it != histogram.end()); // Cannot unlock an area that was not locked
             // Decrease counter for page, when it is zero, the page will be unlocked
             it->second -= 1;
             if(it->second == 0) // Nothing on the page anymore that keeps it locked
             {
-                // Unlock page and remove the count from histooffshore
+                // Unlock page and remove the count from histogram
                 locker.Unlock(reinterpret_cast<void*>(page), page_size);
-                histooffshore.erase(it);
+                histogram.erase(it);
             }
         }
     }
@@ -103,7 +103,7 @@ public:
     int GetLockedPageCount()
     {
         boost::mutex::scoped_lock lock(mutex);
-        return histooffshore.size();
+        return histogram.size();
     }
 
 private:
@@ -111,8 +111,8 @@ private:
     boost::mutex mutex;
     size_t page_size, page_mask;
     // map of page base address to lock count
-    typedef std::map<size_t,int> Histooffshore;
-    Histooffshore histooffshore;
+    typedef std::map<size_t,int> Histogram;
+    Histogram histogram;
 };
 
 /** Determine system page size in bytes */

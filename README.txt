@@ -4,14 +4,14 @@ Working update for Offshore Coin [OFFSHORE]
 Name: OFFSHORECOIN
 Symbol: OFFSHORE
 Algorithm: SHA256,POW
-Block Reward: 220 Block
-Reward Halving Rate: 144000
+Block Reward: 22 Block
+Reward Halving Rate: 14400
 Block time: 120 sec
-Difficulty retarget: Light Neutron Pulse
+Difficulty retarget: Dark Gravity Wave 
 Total supply: 6,553,600 
 
-RPC port: 7566
-Net port: 7567
+RPC port: 8015
+Net port: 8016
 
 
 Trading: https://yobit.net/en/trade/OFFSHORE/BTC

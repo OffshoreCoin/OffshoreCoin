@@ -5,11 +5,11 @@
 #include <math.h>
 #include <stdio.h>
 #include "port/port.h"
-#include "util/histooffshore.h"
+#include "util/histogram.h"
 
 namespace leveldb {
 
-const double Histooffshore::kBucketLimit[kNumBuckets] = {
+const double Histogram::kBucketLimit[kNumBuckets] = {
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45,
   50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200, 250, 300, 350, 400, 450,
   500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2500, 3000,
@@ -30,7 +30,7 @@ const double Histooffshore::kBucketLimit[kNumBuckets] = {
   1e200,
 };
 
-void Histooffshore::Clear() {
+void Histogram::Clear() {
   min_ = kBucketLimit[kNumBuckets-1];
   max_ = 0;
   num_ = 0;
@@ -41,7 +41,7 @@ void Histooffshore::Clear() {
   }
 }
 
-void Histooffshore::Add(double value) {
+void Histogram::Add(double value) {
   // Linear search is fast enough for our usage in db_bench
   int b = 0;
   while (b < kNumBuckets - 1 && kBucketLimit[b] <= value) {
@@ -55,7 +55,7 @@ void Histooffshore::Add(double value) {
   sum_squares_ += (value * value);
 }
 
-void Histooffshore::Merge(const Histooffshore& other) {
+void Histogram::Merge(const Histogram& other) {
   if (other.min_ < min_) min_ = other.min_;
   if (other.max_ > max_) max_ = other.max_;
   num_ += other.num_;
@@ -66,11 +66,11 @@ void Histooffshore::Merge(const Histooffshore& other) {
   }
 }
 
-double Histooffshore::Median() const {
+double Histogram::Median() const {
   return Percentile(50.0);
 }
 
-double Histooffshore::Percentile(double p) const {
+double Histogram::Percentile(double p) const {
   double threshold = num_ * (p / 100.0);
   double sum = 0;
   for (int b = 0; b < kNumBuckets; b++) {
@@ -91,18 +91,18 @@ double Histooffshore::Percentile(double p) const {
   return max_;
 }
 
-double Histooffshore::Average() const {
+double Histogram::Average() const {
   if (num_ == 0.0) return 0;
   return sum_ / num_;
 }
 
-double Histooffshore::StandardDeviation() const {
+double Histogram::StandardDeviation() const {
   if (num_ == 0.0) return 0;
   double variance = (sum_squares_ * num_ - sum_ * sum_) / (num_ * num_);
   return sqrt(variance);
 }
 
-std::string Histooffshore::ToString() const {
+std::string Histogram::ToString() const {
   std::string r;
   char buf[200];
   snprintf(buf, sizeof(buf),
