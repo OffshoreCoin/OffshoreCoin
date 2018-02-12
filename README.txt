@@ -7,7 +7,7 @@ Symbol: OFFSHORE
 Algorithm: SHA256,POW
 Block Reward: 22 Block
 Reward Halving Rate: 14400
-Block time: 120 sec
+Block time: 240 sec
 Difficulty retarget: Dark Gravity Wave 
 Total supply: 6,553,600 
 
