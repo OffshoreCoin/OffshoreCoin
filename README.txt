@@ -1,6 +1,7 @@
 
 Working update for Offshore Coin [OFFSHORE]
 
+O/S: Ubuntu 12.04 Server 
 Name: OFFSHORECOIN
 Symbol: OFFSHORE
 Algorithm: SHA256,POW
